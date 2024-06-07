@@ -16,10 +16,25 @@ class HitAndBlow {
   answerSource: string[] = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
   answer: string[] = [];
   tryCount = 0;
+
+  setting() {
+    const answerLength = 3;
+
+    // 以下の処理をanswer配列が所定の数埋まるまで繰り返す
+    while (this.answer.length < answerLength) {
+      // answerSourceからランダムに値を１つ取り出す
+      const randNum = Math.floor(Math.random() * this.answerSource.length);
+      const selectedItem = this.answerSource[randNum];
+
+      //   まだその値が使用されていないのであれば「answer」配列に追加する
+      if (!this.answer.includes(selectedItem)) {
+        this.answer.push(selectedItem);
+      }
+    }
+  }
 }
 
 (async () => {
   const hitAndBlow = new HitAndBlow();
-  //   const name: string = game;
-  // error: Cannot find name 'game'.
+  hitAndBlow.setting();
 })();
