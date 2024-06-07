@@ -12,14 +12,6 @@ const promptInput = async (text: string) => {
   return input.trim();
 };
 
-(async () => {
-  const name = await promptInput("名前を入力してください");
-  console.log(name);
-  const age = await promptInput("年齢を入力してください");
-  console.log(age);
-  process.exit();
-})();
-
 class HitAndBlow {
   answerSource: string[];
   answer: string[];
@@ -31,3 +23,7 @@ class HitAndBlow {
     this.tryCount = 0;
   }
 }
+
+(async () => {
+  const hitAndBlow = new HitAndBlow();
+})();
