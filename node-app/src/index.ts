@@ -13,9 +13,20 @@ const promptInput = async (text: string) => {
 };
 
 class HitAndBlow {
-  answerSource: string[] = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
-  answer: string[] = [];
-  tryCount = 0;
+  private readonly answerSource = [
+    "0",
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+  ];
+  private answer: string[] = [];
+  private tryCount = 0;
 
   setting() {
     const answerLength = 3;
