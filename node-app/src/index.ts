@@ -32,6 +32,13 @@ class HitAndBlow {
       }
     }
   }
+
+  // ゲームそのものの処理
+  async play() {
+    const inputArr = (
+      await promptInput("「,」区切りで3つの数字を入力してください")
+    ).split(",");
+  }
 }
 
 (async () => {
