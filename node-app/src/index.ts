@@ -63,7 +63,7 @@ class HitAndBlow {
   }
 
   // check method: 受け取ったヒットの数とブローの数を算出する処理
-  check(input: string[]) {
+  private check(input: string[]) {
     let hitCount = 0;
     let blowCount = 0;
 
@@ -86,4 +86,5 @@ class HitAndBlow {
 (async () => {
   const hitAndBlow = new HitAndBlow();
   hitAndBlow.setting();
+  await hitAndBlow.play();
 })();
