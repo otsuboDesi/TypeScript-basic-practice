@@ -28,6 +28,13 @@ class HitAndBlow {
   private answer: string[] = [];
   private tryCount = 0;
 
+  // modeの追加
+  private mode: "nomal" | "hard";
+
+  constructor(mode: "nomal" | "hard") {
+    this.mode = mode;
+  }
+
   setting() {
     const answerLength = 3;
 
@@ -109,7 +116,7 @@ class HitAndBlow {
 }
 
 (async () => {
-  const hitAndBlow = new HitAndBlow();
+  const hitAndBlow = new HitAndBlow("nomal");
   hitAndBlow.setting();
   await hitAndBlow.play();
   hitAndBlow.end();
