@@ -62,6 +62,12 @@ class HitAndBlow {
     }
   }
 
+  // ゲーム終了時の処理
+  end() {
+    printLine(`正解です! \n 試行回数: ${this.tryCount}回`);
+    process.exit();
+  }
+
   // check method: 受け取ったヒットの数とブローの数を算出する処理
   private check(input: string[]) {
     let hitCount = 0;
@@ -87,4 +93,5 @@ class HitAndBlow {
   const hitAndBlow = new HitAndBlow();
   hitAndBlow.setting();
   await hitAndBlow.play();
+  hitAndBlow.end();
 })();
