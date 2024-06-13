@@ -30,13 +30,10 @@ class HitAndBlow {
   ];
   private answer: string[] = [];
   private tryCount = 0;
-  private mode: Mode;
+  private mode: Mode = "normal";
 
-  constructor(mode: Mode) {
-    this.mode = mode;
-  }
-
-  setting() {
+  async setting() {
+    this.mode = (await promptInput("モードを入力してください。")) as Mode;
     const answerLength = this.getAnswerLength();
 
     // 以下の処理をanswer配列が所定の数埋まるまで繰り返す
@@ -132,8 +129,8 @@ class HitAndBlow {
 }
 
 (async () => {
-  const hitAndBlow = new HitAndBlow("hard");
-  hitAndBlow.setting();
+  const hitAndBlow = new HitAndBlow();
+  await hitAndBlow.setting();
   await hitAndBlow.play();
   hitAndBlow.end();
 })();
