@@ -2,14 +2,47 @@ const printLine = (text: string, breakLine: boolean = true) => {
   process.stdout.write(text + (breakLine ? "\n" : ""));
 };
 
-// ユーザーに質問を投げかけ、入力をしてもらう関数
-const promptInput = async (text: string) => {
-  printLine(`\n${text}\n> `, false);
-
+const readLine = async () => {
   const input: string = await new Promise((resolve) =>
     process.stdin.once("data", (data) => resolve(data.toString()))
   );
   return input.trim();
+};
+
+// ユーザーに質問を投げかけ、入力をしてもらう関数
+const promptInput = async (text: string) => {
+  printLine(`\n${text}\n> `, false);
+
+  return readLine();
+};
+
+// ユーザーに複数の選択肢から選ばせるプロンプトを表示する非同期関数
+const promptSelect = async (
+  text: string,
+  values: readonly string[]
+): Promise<string> => {
+  // 質問文を表示
+  printLine(`\n${text}`);
+
+  // 各選択肢を表示
+  values.forEach((value) => {
+    printLine(`- ${value}`);
+  });
+
+  // プロンプトを表示（入力を待機）
+  printLine(`> `, false);
+
+  // ユーザーの入力を待機
+  const input = await readLine();
+
+  // 入力が選択肢に含まれているか確認
+  if (values.includes(input)) {
+    // 有効な入力の場合、その入力を返す
+    return input;
+  } else {
+    // 無効な入力の場合、再度プロンプトを表示
+    return promptSelect(text, values);
+  }
 };
 
 // modeの追加
@@ -33,7 +66,10 @@ class HitAndBlow {
   private mode: Mode = "normal";
 
   async setting() {
-    this.mode = (await promptInput("モードを入力してください。")) as Mode;
+    this.mode = (await promptSelect("モードを入力してください。", [
+      "normal",
+      "hard",
+    ])) as Mode;
     const answerLength = this.getAnswerLength();
 
     // 以下の処理をanswer配列が所定の数埋まるまで繰り返す
