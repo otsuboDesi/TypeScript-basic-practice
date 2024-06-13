@@ -29,14 +29,14 @@ class HitAndBlow {
   private tryCount = 0;
 
   // modeの追加
-  private mode: "nomal" | "hard";
+  private mode: "normal" | "hard";
 
-  constructor(mode: "nomal" | "hard") {
+  constructor(mode: "normal" | "hard") {
     this.mode = mode;
   }
 
   setting() {
-    const answerLength = 3;
+    const answerLength = this.getAnswerLength();
 
     // 以下の処理をanswer配列が所定の数埋まるまで繰り返す
     while (this.answer.length < answerLength) {
@@ -53,8 +53,11 @@ class HitAndBlow {
 
   // ゲームそのものの処理
   async play() {
+    const answerLength = this.getAnswerLength();
     const inputArr = (
-      await promptInput("「,」区切りで3つの数字を入力してください")
+      await promptInput(
+        `「,」区切りで${answerLength}つの数字を入力してください`
+      )
     ).split(",");
 
     if (!this.validate(inputArr)) {
@@ -113,10 +116,19 @@ class HitAndBlow {
     );
     return isLengthValid && isAllAnswerSourceOption && isAllDifferentValues;
   }
+
+  private getAnswerLength() {
+    switch (this.mode) {
+      case "normal":
+        return 3;
+      case "hard":
+        return 4;
+    }
+  }
 }
 
 (async () => {
-  const hitAndBlow = new HitAndBlow("nomal");
+  const hitAndBlow = new HitAndBlow("hard");
   hitAndBlow.setting();
   await hitAndBlow.play();
   hitAndBlow.end();

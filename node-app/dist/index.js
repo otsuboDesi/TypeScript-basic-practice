@@ -56,7 +56,7 @@ var promptInput = function (text) { return __awaiter(void 0, void 0, void 0, fun
     });
 }); };
 var HitAndBlow = /** @class */ (function () {
-    function HitAndBlow() {
+    function HitAndBlow(mode) {
         this.answerSource = [
             "0",
             "1",
@@ -71,9 +71,10 @@ var HitAndBlow = /** @class */ (function () {
         ];
         this.answer = [];
         this.tryCount = 0;
+        this.mode = mode;
     }
     HitAndBlow.prototype.setting = function () {
-        var answerLength = 3;
+        var answerLength = this.getAnswerLength();
         // 以下の処理をanswer配列が所定の数埋まるまで繰り返す
         while (this.answer.length < answerLength) {
             // answerSourceからランダムに値を１つ取り出す
@@ -88,10 +89,12 @@ var HitAndBlow = /** @class */ (function () {
     // ゲームそのものの処理
     HitAndBlow.prototype.play = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var inputArr, result;
+            var answerLength, inputArr, result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, promptInput("「,」区切りで3つの数字を入力してください")];
+                    case 0:
+                        answerLength = this.getAnswerLength();
+                        return [4 /*yield*/, promptInput("\u300C,\u300D\u533A\u5207\u308A\u3067" + answerLength + "\u3064\u306E\u6570\u5B57\u3092\u5165\u529B\u3057\u3066\u304F\u3060\u3055\u3044")];
                     case 1:
                         inputArr = (_a.sent()).split(",");
                         if (!!this.validate(inputArr)) return [3 /*break*/, 3];
@@ -153,6 +156,14 @@ var HitAndBlow = /** @class */ (function () {
         var isAllDifferentValues = inputArr.every(function (val, i) { return inputArr.indexOf(val) === i; });
         return isLengthValid && isAllAnswerSourceOption && isAllDifferentValues;
     };
+    HitAndBlow.prototype.getAnswerLength = function () {
+        switch (this.mode) {
+            case "normal":
+                return 3;
+            case "hard":
+                return 4;
+        }
+    };
     return HitAndBlow;
 }());
 (function () { return __awaiter(void 0, void 0, void 0, function () {
@@ -160,7 +171,7 @@ var HitAndBlow = /** @class */ (function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                hitAndBlow = new HitAndBlow();
+                hitAndBlow = new HitAndBlow("hard");
                 hitAndBlow.setting();
                 return [4 /*yield*/, hitAndBlow.play()];
             case 1:
