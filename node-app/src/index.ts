@@ -12,6 +12,9 @@ const promptInput = async (text: string) => {
   return input.trim();
 };
 
+// modeの追加
+type Mode = "normal" | "hard";
+
 class HitAndBlow {
   private readonly answerSource = [
     "0",
@@ -27,11 +30,9 @@ class HitAndBlow {
   ];
   private answer: string[] = [];
   private tryCount = 0;
+  private mode: Mode;
 
-  // modeの追加
-  private mode: "normal" | "hard";
-
-  constructor(mode: "normal" | "hard") {
+  constructor(mode: Mode) {
     this.mode = mode;
   }
 
