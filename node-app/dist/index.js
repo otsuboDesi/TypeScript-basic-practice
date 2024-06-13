@@ -57,16 +57,99 @@ var promptInput = function (text) { return __awaiter(void 0, void 0, void 0, fun
 }); };
 var HitAndBlow = /** @class */ (function () {
     function HitAndBlow() {
-        this.answerSource = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+        this.answerSource = [
+            "0",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+        ];
         this.answer = [];
         this.tryCount = 0;
     }
+    HitAndBlow.prototype.setting = function () {
+        var answerLength = 3;
+        // 以下の処理をanswer配列が所定の数埋まるまで繰り返す
+        while (this.answer.length < answerLength) {
+            // answerSourceからランダムに値を１つ取り出す
+            var randNum = Math.floor(Math.random() * this.answerSource.length);
+            var selectedItem = this.answerSource[randNum];
+            //   まだその値が使用されていないのであれば「answer」配列に追加する
+            if (!this.answer.includes(selectedItem)) {
+                this.answer.push(selectedItem);
+            }
+        }
+    };
+    // ゲームそのものの処理
+    HitAndBlow.prototype.play = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var inputArr, result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, promptInput("「,」区切りで3つの数字を入力してください")];
+                    case 1:
+                        inputArr = (_a.sent()).split(",");
+                        result = this.check(inputArr);
+                        if (!(result.hit !== this.answer.length)) return [3 /*break*/, 3];
+                        // 不正解だったら続ける
+                        printLine("---\nHit: " + result.hit + "\nBlow: " + result.blow + "\n---");
+                        this.tryCount += 1;
+                        return [4 /*yield*/, this.play()];
+                    case 2:
+                        _a.sent();
+                        return [3 /*break*/, 4];
+                    case 3:
+                        // 正解だったら終了
+                        this.tryCount += 1;
+                        _a.label = 4;
+                    case 4: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    // ゲーム終了時の処理
+    HitAndBlow.prototype.end = function () {
+        printLine("\u6B63\u89E3\u3067\u3059! \n \u8A66\u884C\u56DE\u6570: " + this.tryCount + "\u56DE");
+        process.exit();
+    };
+    // check method: 受け取ったヒットの数とブローの数を算出する処理
+    HitAndBlow.prototype.check = function (input) {
+        var _this = this;
+        var hitCount = 0;
+        var blowCount = 0;
+        input.forEach(function (val, index) {
+            if (val === _this.answer[index]) {
+                hitCount += 1;
+            }
+            else if (_this.answer.includes(val)) {
+                blowCount += 1;
+            }
+        });
+        // ヒットの数とブローの数を算出
+        return {
+            hit: hitCount,
+            blow: blowCount
+        };
+    };
     return HitAndBlow;
 }());
 (function () { return __awaiter(void 0, void 0, void 0, function () {
     var hitAndBlow;
     return __generator(this, function (_a) {
-        hitAndBlow = new HitAndBlow();
-        return [2 /*return*/];
+        switch (_a.label) {
+            case 0:
+                hitAndBlow = new HitAndBlow();
+                hitAndBlow.setting();
+                return [4 /*yield*/, hitAndBlow.play()];
+            case 1:
+                _a.sent();
+                hitAndBlow.end();
+                return [2 /*return*/];
+        }
     });
 }); })();
