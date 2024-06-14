@@ -56,10 +56,7 @@ const gameTitles = ["hit and blow", "janken"] as const;
 type GameTitle = (typeof gameTitles)[number];
 
 // ゲームの選択肢
-type GameStore = {
-  "hit and blow": HitAndBlow;
-  janken: Janken;
-};
+type GameStore = { [key in GameTitle]: HitAndBlow | Janken };
 
 // どのゲームで遊ぶか選択する
 class GameProcedure {
