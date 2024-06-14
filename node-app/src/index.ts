@@ -52,6 +52,9 @@ const promptSelect = async <T>(
 const nextActions = ["play again", "exit"] as const;
 type NextAction = (typeof nextActions)[number];
 
+const gameTitles = ["hit and blow", "janken"] as const;
+type GameTitle = (typeof gameTitles)[number];
+
 // ゲームの選択肢
 type GameStore = {
   "hit and blow": HitAndBlow;
@@ -61,21 +64,32 @@ type GameStore = {
 // どのゲームで遊ぶか選択する
 class GameProcedure {
   // 現在選択されているゲームのタイトル
-  private currentGameTitle = "hit and blow";
+  private currentGameTitle: GameTitle | "" = "";
 
   // 現在選択されているゲームクラスのインスタンス
-  private currentGame = new HitAndBlow();
+  private currentGame: HitAndBlow | Janken | null = null;
 
   // GameProcedureがインスタンス化される時gameStoreプロパティがセットされる
   constructor(private readonly gameStore: GameStore) {}
 
   // ゲームの選択などの初期設定
   public async start() {
+    await this.select();
     await this.play();
+  }
+
+  // ゲームのタイトルを選択する処理
+  private async select() {
+    this.currentGameTitle = await promptSelect<GameTitle>(
+      "ゲームのタイトルを入力してください。",
+      gameTitles
+    );
+    this.currentGame = this.gameStore[this.currentGameTitle];
   }
 
   // currentGameの実行
   private async play() {
+    if (!this.currentGame) throw new Error("ゲームが選択されていません");
     printLine(`===\n${this.currentGameTitle} を開始します。\n===`);
     await this.currentGame.setting();
     await this.currentGame.play();
