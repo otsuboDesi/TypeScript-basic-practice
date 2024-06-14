@@ -35,19 +35,24 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+// 指定したテキストをコンソールに出力し、必要に応じて改行を追加
 var printLine = function (text, breakLine) {
     if (breakLine === void 0) { breakLine = true; }
+    // process.stdout.write(): Node.js の標準出力 (stdout) に対してテキストを直接書き込むためのメソッド
     process.stdout.write(text + (breakLine ? "\n" : ""));
 };
+// ユーザーの入力を非同期で読み取り、その入力を文字列として返す
 var readLine = function () { return __awaiter(void 0, void 0, void 0, function () {
     var input;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0: return [4 /*yield*/, new Promise(function (resolve) {
+                    // process.stdin.once(): Node.js の標準入力 (stdin) ストリームに対してイベントリスナーを一度だけ登録するためのメソッド
                     return process.stdin.once("data", function (data) { return resolve(data.toString()); });
                 })];
             case 1:
                 input = _a.sent();
+                // trim(): 文字列の両端から空白文字を削除するためのメソッド
                 return [2 /*return*/, input.trim()];
         }
     });
@@ -89,6 +94,7 @@ var promptSelect = function (text, values) { return __awaiter(void 0, void 0, vo
         }
     });
 }); };
+var nextActions = ["play again", "exit"];
 // どのゲームで遊ぶか選択する
 var GameProcedure = /** @class */ (function () {
     function GameProcedure() {
@@ -113,6 +119,7 @@ var GameProcedure = /** @class */ (function () {
     // currentGameの実行
     GameProcedure.prototype.play = function () {
         return __awaiter(this, void 0, void 0, function () {
+            var action, neverValue;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -124,8 +131,24 @@ var GameProcedure = /** @class */ (function () {
                     case 2:
                         _a.sent();
                         this.currentGame.end();
-                        this.end();
-                        return [2 /*return*/];
+                        return [4 /*yield*/, promptSelect("ゲームを続けますか？", nextActions)];
+                    case 3:
+                        action = _a.sent();
+                        if (!(action === "play again")) return [3 /*break*/, 5];
+                        return [4 /*yield*/, this.play()];
+                    case 4:
+                        _a.sent();
+                        return [3 /*break*/, 6];
+                    case 5:
+                        if (action === "exit") {
+                            this.end();
+                        }
+                        else {
+                            neverValue = action;
+                            throw new Error(neverValue + " is an invalid action.");
+                        }
+                        _a.label = 6;
+                    case 6: return [2 /*return*/];
                 }
             });
         });
@@ -223,7 +246,12 @@ var HitAndBlow = /** @class */ (function () {
     // ゲーム終了時の処理
     HitAndBlow.prototype.end = function () {
         printLine("\u6B63\u89E3\u3067\u3059! \n \u8A66\u884C\u56DE\u6570: " + this.tryCount + "\u56DE");
-        process.exit();
+        this.reset();
+    };
+    // ゲームのリセットの処理
+    HitAndBlow.prototype.reset = function () {
+        this.answer = [];
+        this.tryCount = 0;
     };
     // check method: 受け取ったヒットの数とブローの数を算出する処理
     HitAndBlow.prototype.check = function (input) {

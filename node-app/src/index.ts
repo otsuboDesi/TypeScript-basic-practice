@@ -1,11 +1,16 @@
+// 指定したテキストをコンソールに出力し、必要に応じて改行を追加
 const printLine = (text: string, breakLine: boolean = true) => {
+  // process.stdout.write(): Node.js の標準出力 (stdout) に対してテキストを直接書き込むためのメソッド
   process.stdout.write(text + (breakLine ? "\n" : ""));
 };
 
+// ユーザーの入力を非同期で読み取り、その入力を文字列として返す
 const readLine = async () => {
   const input: string = await new Promise((resolve) =>
+    // process.stdin.once(): Node.js の標準入力 (stdin) ストリームに対してイベントリスナーを一度だけ登録するためのメソッド
     process.stdin.once("data", (data) => resolve(data.toString()))
   );
+  // trim(): 文字列の両端から空白文字を削除するためのメソッド
   return input.trim();
 };
 
@@ -44,6 +49,9 @@ const promptSelect = async <T>(
   }
 };
 
+const nextActions = ["play again", "exit"] as const;
+type NextAction = (typeof nextActions)[number];
+
 // どのゲームで遊ぶか選択する
 class GameProcedure {
   // 現在選択されているゲームのタイトル
@@ -63,7 +71,20 @@ class GameProcedure {
     await this.currentGame.setting();
     await this.currentGame.play();
     this.currentGame.end();
-    this.end();
+
+    // game終了後に続けるかの処理
+    const action = await promptSelect<NextAction>(
+      "ゲームを続けますか？",
+      nextActions
+    );
+    if (action === "play again") {
+      await this.play();
+    } else if (action === "exit") {
+      this.end();
+    } else {
+      const neverValue: never = action;
+      throw new Error(`${neverValue} is an invalid action.`);
+    }
   }
 
   // アプリケーションの終了
@@ -144,7 +165,13 @@ class HitAndBlow {
   // ゲーム終了時の処理
   end() {
     printLine(`正解です! \n 試行回数: ${this.tryCount}回`);
-    process.exit();
+    this.reset();
+  }
+
+  // ゲームのリセットの処理
+  private reset() {
+    this.answer = [];
+    this.tryCount = 0;
   }
 
   // check method: 受け取ったヒットの数とブローの数を算出する処理
