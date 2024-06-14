@@ -52,6 +52,12 @@ const promptSelect = async <T>(
 const nextActions = ["play again", "exit"] as const;
 type NextAction = (typeof nextActions)[number];
 
+// ゲームの選択肢
+type GameStore = {
+  "hit and blow": HitAndBlow;
+  janken: Janken;
+};
+
 // どのゲームで遊ぶか選択する
 class GameProcedure {
   // 現在選択されているゲームのタイトル
@@ -59,6 +65,9 @@ class GameProcedure {
 
   // 現在選択されているゲームクラスのインスタンス
   private currentGame = new HitAndBlow();
+
+  // GameProcedureがインスタンス化される時gameStoreプロパティがセットされる
+  constructor(private readonly gameStore: GameStore) {}
 
   // ゲームの選択などの初期設定
   public async start() {
@@ -312,5 +321,8 @@ class Janken {
 }
 
 (async () => {
-  new GameProcedure().start();
+  new GameProcedure({
+    "hit and blow": new HitAndBlow(),
+    janken: new Janken(),
+  }).start();
 })();
