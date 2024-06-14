@@ -44,10 +44,40 @@ const promptSelect = async <T>(
   }
 };
 
+// どのゲームで遊ぶか選択する
+class GameProcedure {
+  // 現在選択されているゲームのタイトル
+  private currentGameTitle = "hit and blow";
+
+  // 現在選択されているゲームクラスのインスタンス
+  private currentGame = new HitAndBlow();
+
+  // ゲームの選択などの初期設定
+  public async start() {
+    await this.play();
+  }
+
+  // currentGameの実行
+  private async play() {
+    printLine(`===\n${this.currentGameTitle} を開始します。\n===`);
+    await this.currentGame.setting();
+    await this.currentGame.play();
+    this.currentGame.end();
+    this.end();
+  }
+
+  // アプリケーションの終了
+  private end() {
+    printLine("ゲームを終了しました。");
+    process.exit();
+  }
+}
+
 // modeの追加
 const modes = ["normal", "hard"] as const;
 type Mode = (typeof modes)[number];
 
+// game: HitAndBlow
 class HitAndBlow {
   private readonly answerSource = [
     "0",
@@ -65,6 +95,7 @@ class HitAndBlow {
   private tryCount = 0;
   private mode: Mode = "normal";
 
+  // modeの設定
   async setting() {
     this.mode = await promptSelect<Mode>("モードを入力してください。", modes);
     const answerLength = this.getAnswerLength();
@@ -162,8 +193,5 @@ class HitAndBlow {
 }
 
 (async () => {
-  const hitAndBlow = new HitAndBlow();
-  await hitAndBlow.setting();
-  await hitAndBlow.play();
-  hitAndBlow.end();
+  new GameProcedure().start();
 })();

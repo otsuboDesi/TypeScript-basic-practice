@@ -89,8 +89,57 @@ var promptSelect = function (text, values) { return __awaiter(void 0, void 0, vo
         }
     });
 }); };
+// どのゲームで遊ぶか選択する
+var GameProcedure = /** @class */ (function () {
+    function GameProcedure() {
+        // 現在選択されているゲームのタイトル
+        this.currentGameTitle = "hit and blow";
+        // 現在選択されているゲームクラスのインスタンス
+        this.currentGame = new HitAndBlow();
+    }
+    // ゲームの選択などの初期設定
+    GameProcedure.prototype.start = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.play()];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    // currentGameの実行
+    GameProcedure.prototype.play = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        printLine("===\n" + this.currentGameTitle + " \u3092\u958B\u59CB\u3057\u307E\u3059\u3002\n===");
+                        return [4 /*yield*/, this.currentGame.setting()];
+                    case 1:
+                        _a.sent();
+                        return [4 /*yield*/, this.currentGame.play()];
+                    case 2:
+                        _a.sent();
+                        this.currentGame.end();
+                        this.end();
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    // アプリケーションの終了
+    GameProcedure.prototype.end = function () {
+        printLine("ゲームを終了しました。");
+        process.exit();
+    };
+    return GameProcedure;
+}());
 // modeの追加
 var modes = ["normal", "hard"];
+// game: HitAndBlow
 var HitAndBlow = /** @class */ (function () {
     function HitAndBlow() {
         this.answerSource = [
@@ -109,6 +158,7 @@ var HitAndBlow = /** @class */ (function () {
         this.tryCount = 0;
         this.mode = "normal";
     }
+    // modeの設定
     HitAndBlow.prototype.setting = function () {
         return __awaiter(this, void 0, void 0, function () {
             var _a, answerLength, randNum, selectedItem;
@@ -218,19 +268,8 @@ var HitAndBlow = /** @class */ (function () {
     return HitAndBlow;
 }());
 (function () { return __awaiter(void 0, void 0, void 0, function () {
-    var hitAndBlow;
     return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                hitAndBlow = new HitAndBlow();
-                return [4 /*yield*/, hitAndBlow.setting()];
-            case 1:
-                _a.sent();
-                return [4 /*yield*/, hitAndBlow.play()];
-            case 2:
-                _a.sent();
-                hitAndBlow.end();
-                return [2 /*return*/];
-        }
+        new GameProcedure().start();
+        return [2 /*return*/];
     });
 }); })();
