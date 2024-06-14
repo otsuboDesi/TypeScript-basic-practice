@@ -39,22 +39,58 @@ var printLine = function (text, breakLine) {
     if (breakLine === void 0) { breakLine = true; }
     process.stdout.write(text + (breakLine ? "\n" : ""));
 };
-// ユーザーに質問を投げかけ、入力をしてもらう関数
-var promptInput = function (text) { return __awaiter(void 0, void 0, void 0, function () {
+var readLine = function () { return __awaiter(void 0, void 0, void 0, function () {
     var input;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0:
-                printLine("\n" + text + "\n> ", false);
-                return [4 /*yield*/, new Promise(function (resolve) {
-                        return process.stdin.once("data", function (data) { return resolve(data.toString()); });
-                    })];
+            case 0: return [4 /*yield*/, new Promise(function (resolve) {
+                    return process.stdin.once("data", function (data) { return resolve(data.toString()); });
+                })];
             case 1:
                 input = _a.sent();
                 return [2 /*return*/, input.trim()];
         }
     });
 }); };
+// ユーザーに質問を投げかけ、入力をしてもらう関数
+var promptInput = function (text) { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        printLine("\n" + text + "\n> ", false);
+        return [2 /*return*/, readLine()];
+    });
+}); };
+// ユーザーに複数の選択肢から選ばせるプロンプトを表示する非同期関数
+var promptSelect = function (text, values) { return __awaiter(void 0, void 0, void 0, function () {
+    var input;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                // 質問文を表示
+                printLine("\n" + text);
+                // 各選択肢を表示
+                values.forEach(function (value) {
+                    printLine("- " + value);
+                });
+                // プロンプトを表示（入力を待機）
+                printLine("> ", false);
+                return [4 /*yield*/, readLine()];
+            case 1:
+                input = (_a.sent());
+                // 入力が選択肢に含まれているか確認
+                if (values.includes(input)) {
+                    // 有効な入力の場合、その入力を返す
+                    return [2 /*return*/, input];
+                }
+                else {
+                    // 無効な入力の場合、再度プロンプトを表示
+                    return [2 /*return*/, promptSelect(text, values)];
+                }
+                return [2 /*return*/];
+        }
+    });
+}); };
+// modeの追加
+var modes = ["normal", "hard"];
 var HitAndBlow = /** @class */ (function () {
     function HitAndBlow() {
         this.answerSource = [
@@ -80,9 +116,9 @@ var HitAndBlow = /** @class */ (function () {
                 switch (_b.label) {
                     case 0:
                         _a = this;
-                        return [4 /*yield*/, promptInput("モードを入力してください。")];
+                        return [4 /*yield*/, promptSelect("モードを入力してください。", modes)];
                     case 1:
-                        _a.mode = (_b.sent());
+                        _a.mode = _b.sent();
                         answerLength = this.getAnswerLength();
                         // 以下の処理をanswer配列が所定の数埋まるまで繰り返す
                         while (this.answer.length < answerLength) {

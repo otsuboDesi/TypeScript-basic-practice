@@ -12,15 +12,14 @@ const readLine = async () => {
 // ユーザーに質問を投げかけ、入力をしてもらう関数
 const promptInput = async (text: string) => {
   printLine(`\n${text}\n> `, false);
-
   return readLine();
 };
 
 // ユーザーに複数の選択肢から選ばせるプロンプトを表示する非同期関数
-const promptSelect = async (
+const promptSelect = async <T>(
   text: string,
-  values: readonly string[]
-): Promise<string> => {
+  values: readonly T[]
+): Promise<T> => {
   // 質問文を表示
   printLine(`\n${text}`);
 
@@ -33,7 +32,7 @@ const promptSelect = async (
   printLine(`> `, false);
 
   // ユーザーの入力を待機
-  const input = await readLine();
+  const input = (await readLine()) as T;
 
   // 入力が選択肢に含まれているか確認
   if (values.includes(input)) {
@@ -41,12 +40,13 @@ const promptSelect = async (
     return input;
   } else {
     // 無効な入力の場合、再度プロンプトを表示
-    return promptSelect(text, values);
+    return promptSelect<T>(text, values);
   }
 };
 
 // modeの追加
-type Mode = "normal" | "hard";
+const modes = ["normal", "hard"] as const;
+type Mode = (typeof modes)[number];
 
 class HitAndBlow {
   private readonly answerSource = [
@@ -66,10 +66,7 @@ class HitAndBlow {
   private mode: Mode = "normal";
 
   async setting() {
-    this.mode = (await promptSelect("モードを入力してください。", [
-      "normal",
-      "hard",
-    ])) as Mode;
+    this.mode = await promptSelect<Mode>("モードを入力してください。", modes);
     const answerLength = this.getAnswerLength();
 
     // 以下の処理をanswer配列が所定の数埋まるまで繰り返す
