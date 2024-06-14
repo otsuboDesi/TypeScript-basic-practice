@@ -95,6 +95,13 @@ var promptSelect = function (text, values) { return __awaiter(void 0, void 0, vo
     });
 }); };
 var nextActions = ["play again", "change game", "exit"];
+// 抽象クラス: 抽象クラスにはabstractを使う
+//それぞれの具体的なゲームのクラスにどのような振舞いが実装されて欲しいかという情報を抽象的に肩によって表現する
+var Game = /** @class */ (function () {
+    function Game() {
+    }
+    return Game;
+}());
 var gameTitles = ["hit and blow", "janken"];
 // どのゲームで遊ぶか選択する
 var GameProcedure = /** @class */ (function () {
@@ -197,6 +204,7 @@ var GameProcedure = /** @class */ (function () {
 // modeの追加
 var modes = ["normal", "hard"];
 // game: HitAndBlow
+// implements: TypeScript のキーワードの一つで、クラスが特定のインターフェースを実装することを示す
 var HitAndBlow = /** @class */ (function () {
     function HitAndBlow() {
         this.answerSource = [

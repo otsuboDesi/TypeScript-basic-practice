@@ -52,11 +52,20 @@ const promptSelect = async <T>(
 const nextActions = ["play again", "change game", "exit"] as const;
 type NextAction = (typeof nextActions)[number];
 
+// 抽象クラス: 抽象クラスにはabstractを使う
+//それぞれの具体的なゲームのクラスにどのような振舞いが実装されて欲しいかという情報を抽象的に肩によって表現する
+abstract class Game {
+  // abstractがついているメソッドを抽象メソッドという
+  abstract setting(): Promise<void>;
+  abstract play(): Promise<void>;
+  abstract end(): void;
+}
+
 const gameTitles = ["hit and blow", "janken"] as const;
 type GameTitle = (typeof gameTitles)[number];
 
 // ゲームの選択肢
-type GameStore = { [key in GameTitle]: HitAndBlow | Janken };
+type GameStore = { [key in GameTitle]: Game };
 
 // どのゲームで遊ぶか選択する
 class GameProcedure {
@@ -64,7 +73,7 @@ class GameProcedure {
   private currentGameTitle: GameTitle | "" = "";
 
   // 現在選択されているゲームクラスのインスタンス
-  private currentGame: HitAndBlow | Janken | null = null;
+  private currentGame: Game | null = null;
 
   // GameProcedureがインスタンス化される時gameStoreプロパティがセットされる
   constructor(private readonly gameStore: GameStore) {}
@@ -122,7 +131,8 @@ const modes = ["normal", "hard"] as const;
 type Mode = (typeof modes)[number];
 
 // game: HitAndBlow
-class HitAndBlow {
+// implements: TypeScript のキーワードの一つで、クラスが特定のインターフェースを実装することを示す
+class HitAndBlow implements Game {
   private readonly answerSource = [
     "0",
     "1",
@@ -246,7 +256,7 @@ class HitAndBlow {
 const jankenOptions = ["rock", "paper", "scissors"] as const;
 type JankenOption = (typeof jankenOptions)[number];
 
-class Janken {
+class Janken implements Game {
   private rounds = 0;
   private currentRound = 1;
   private result = {
