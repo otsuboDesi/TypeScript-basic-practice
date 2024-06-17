@@ -1,15 +1,22 @@
 import { EventListener } from "./EventListener";
 
 class Application {
+  private readonly eventListener = new EventListener();
   start() {
-    const eventListener = new EventListener();
-    const button = document.getElementById("deleteAllDoneTask");
+    const createForm = document.getElementById("createForm") as HTMLElement;
 
-    if (!button) return;
-    eventListener.add("sample", "click", button, () => alert("clicked"));
-    // add()を呼び出した直後にremove()を呼び出しているのでalertダイアログは表示されなくなる
-    eventListener.remove("sample");
+    this.eventListener.add(
+      "submit-handler",
+      "submit",
+      createForm,
+      this.handleSubmit
+    );
   }
+
+  private handleSubmit = (e: Event) => {
+    e.preventDefault();
+    console.log("submitted");
+  };
 }
 
 // windowsのloadイベントのハンドラでApplicationクラスのインスタンスを作成
