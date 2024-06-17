@@ -24,4 +24,16 @@ export class EventListener {
 
     element.addEventListener(event, handler);
   }
+
+  //   登録したイベントの削除をする処理
+  remove(listenerId: string) {
+    const listener = this.listeners[listenerId];
+
+    if (!listener) return;
+
+    listener.element.removeEventListener(listener.event, listener.handler);
+
+    // 見つけたオブジェクトをthis.listenersからも削除
+    delete this.listeners[listenerId];
+  }
 }

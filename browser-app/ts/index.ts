@@ -7,6 +7,8 @@ class Application {
 
     if (!button) return;
     eventListener.add("sample", "click", button, () => alert("clicked"));
+    // add()を呼び出した直後にremove()を呼び出しているのでalertダイアログは表示されなくなる
+    eventListener.remove("sample");
   }
 }
 
