@@ -1,6 +1,10 @@
 class Application {
   start() {
     console.log("hello world");
+    const button = document.getElementById("deleteAllDoneTask");
+
+    if (!button) return;
+    console.log(button);
   }
 }
 
