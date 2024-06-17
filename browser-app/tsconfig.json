@@ -1,15 +1,27 @@
 {
+  // TypeScript Compilerデコンパイルをする際の出力方法の変更や記述ルールの設定
   "compilerOptions": {
+    // ソースマップファイルを生成する
     "sourceMap": true,
+    // 出力されるECMAScriptのバージョンを設定
     "target": "ES2015",
+    // 型定義の変更。デフォルトはJavaScriptのAPIやブラウザのAPIの型定義が組み込まれている
     "lib": ["DOM", "ESNext"],
+    // 出力されるファイルのモジュールの方式
     "module": "ES2015",
+    // CommonJSとESモジュールの相互運用性を提供する
     "esModuleInterop": true,
+    // 全ての厳密な型チェックオプションを有効にする
     "strict": true,
+    // ファイル名の大文字と小文字の一貫性を強制する
     "forceConsistentCasingInFileNames": true,
+    // switch文のケースでフォールスルーを防ぐ
     "noFallthroughCasesInSwitch": true,
+    // 関数の全てのコードパスで戻り値を明示的に指定する
     "noImplicitReturns": true,
+    // 未使用のローカル変数が存在する場合にエラーを出す
     "noUnusedLocals": true,
+    // 未使用の関数パラメータが存在する場合にエラーを出す
     "noUnusedParameters": true
   }
 }
