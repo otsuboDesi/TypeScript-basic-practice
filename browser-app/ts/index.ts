@@ -7,7 +7,9 @@ class Application {
   private readonly eventListener = new EventListener();
   private readonly taskCollection = new TaskCollection();
   private readonly taskRender = new TaskRender(
-    document.getElementById("todoList") as HTMLElement
+    document.getElementById("todoList") as HTMLElement,
+    document.getElementById("doingList") as HTMLElement,
+    document.getElementById("doneList") as HTMLElement
   );
 
   start() {
