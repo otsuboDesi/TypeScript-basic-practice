@@ -45,6 +45,9 @@ class Application {
 
     // 削除ボタンクリックのイベントハンドラをEventListenerから削除する
     this.eventListener.remove(task.id);
+    this.taskCollection.delete(task);
+    this.taskRender.remove(task);
+    console.log(this.taskCollection);
   };
 }
 
