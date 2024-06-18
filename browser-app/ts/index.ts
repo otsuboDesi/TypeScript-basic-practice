@@ -63,9 +63,17 @@ class Application {
 
     if (!taskId) return;
 
+    const task = this.taskCollection.find(taskId);
     console.log("taskId:", taskId);
     console.log("sibling:", sibling);
     console.log("newStatus:", newStatus);
+
+    if (!task) return;
+    // 更新されたタスクを使ってtasksを更新する
+    task.update({ status: newStatus });
+    this.taskCollection.update(task);
+
+    console.log(sibling);
   };
 }
 
