@@ -22,9 +22,19 @@ export class TaskRender {
 
     if (!taskEl) return;
 
-    // removeChild: DOM API
-    // DOM APIでは指定したHTML要素を直接削除するようなAPIではなく、削除したい要素の親要素のremoveChildを使って要素を削除する
-    this.todoList.removeChild(taskEl);
+    if (task.status === statusMap.todo) {
+      // removeChild: DOM API
+      // DOM APIでは指定したHTML要素を直接削除するようなAPIではなく、削除したい要素の親要素のremoveChildを使って要素を削除する
+      this.todoList.removeChild(taskEl);
+    }
+
+    if (task.status === statusMap.doing) {
+      this.doingList.removeChild(taskEl);
+    }
+
+    if (task.status === statusMap.done) {
+      this.doneList.removeChild(taskEl);
+    }
   }
 
   subscribeDragAndDrop(
