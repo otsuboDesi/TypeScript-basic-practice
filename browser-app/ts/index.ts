@@ -6,7 +6,7 @@ import { TaskRender } from "./TaskRender";
 class Application {
   private readonly eventListener = new EventListener();
   private readonly taskCollection = new TaskCollection();
-  private readonly taskRender = new TaskRender(
+  private readonly taskRenderer = new TaskRender(
     document.getElementById("todoList") as HTMLElement,
     document.getElementById("doingList") as HTMLElement,
     document.getElementById("doneList") as HTMLElement
@@ -21,6 +21,8 @@ class Application {
       createForm,
       this.handleSubmit
     );
+
+    this.taskRenderer.subscribeDragAndDrop();
   }
 
   private handleSubmit = (e: Event) => {
@@ -33,7 +35,7 @@ class Application {
     this.taskCollection.add(task);
 
     // Taskのインスタンスをappend()に渡して画面にタスクを表示させる
-    const { deleteButtonEl } = this.taskRender.append(task);
+    const { deleteButtonEl } = this.taskRenderer.append(task);
 
     this.eventListener.add(task.id, "click", deleteButtonEl, () =>
       this.handleClickDeleteTask(task)
@@ -48,7 +50,7 @@ class Application {
     // 削除ボタンクリックのイベントハンドラをEventListenerから削除する
     this.eventListener.remove(task.id);
     this.taskCollection.delete(task);
-    this.taskRender.remove(task);
+    this.taskRenderer.remove(task);
     console.log(this.taskCollection);
   };
 }

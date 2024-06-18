@@ -1,9 +1,10 @@
+import dragula from "dragula";
 import { Task } from "./Task";
 
 export class TaskRender {
   constructor(
     private readonly todoList: HTMLElement,
-    private readonly tdoingList: HTMLElement,
+    private readonly doingList: HTMLElement,
     private readonly doneList: HTMLElement
   ) {}
 
@@ -25,6 +26,24 @@ export class TaskRender {
     // DOM APIでは指定したHTML要素を直接削除するようなAPIではなく、削除したい要素の親要素のremoveChildを使って要素を削除する
     this.todoList.removeChild(taskEl);
   }
+
+  subscribeDragAndDrop() {
+    // .on(el,target,source)
+    // el: 移動した要素自体が渡される
+    // target: 移動した先の親要素が渡される
+    // source: 移動する前に対象の要素が置かれていた親要素が渡される
+    // sibling: 移動した要素の兄弟の要素が渡される
+    dragula([this.todoList, this.doingList, this.doneList]).on(
+      "drop",
+      (el, target, source, sibling) => {
+        console.log(el);
+        console.log(target);
+        console.log(source);
+        console.log(sibling);
+      }
+    );
+  }
+
   private render(task: Task) {
     // <div class'taskItem'>
     // <span>タイトル</span>
