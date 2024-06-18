@@ -1,10 +1,14 @@
 import { EventListener } from "./EventListener";
 import { Task } from "./Task";
 import { TaskCollection } from "./TaskCollection";
+import { TaskRender } from "./TaskRender";
 
 class Application {
   private readonly eventListener = new EventListener();
   private readonly taskCollection = new TaskCollection();
+  private readonly taskRender = new TaskRender(
+    document.getElementById("todoList") as HTMLElement
+  );
 
   start() {
     const createForm = document.getElementById("createForm") as HTMLElement;
@@ -25,7 +29,12 @@ class Application {
 
     const task = new Task({ title: titleInput.value });
     this.taskCollection.add(task);
-    console.log(this.taskCollection);
+
+    // Taskのインスタンスをappend()に渡して画面にタスクを表示させる
+    this.taskRender.append(task);
+
+    //valueを空文字に代入して、画面の入力フォームの文字を空にしている
+    titleInput.value = "";
   };
 }
 
