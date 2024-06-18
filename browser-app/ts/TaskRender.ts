@@ -4,9 +4,12 @@ export class TaskRender {
   constructor(private readonly todoList: HTMLElement) {}
 
   append(task: Task) {
-    const taskEl = this.render(task);
+    const { taskEl, deleteButtonEl } = this.render(task);
 
     this.todoList.append(taskEl);
+
+    // append()で受け取ったdeletButtonElをそのまま返す
+    return { deleteButtonEl };
   }
 
   private render(task: Task) {
@@ -27,6 +30,6 @@ export class TaskRender {
 
     taskEl.append(spanEl, deleteButtonEl);
 
-    return taskEl;
+    return { taskEl, deleteButtonEl };
   }
 }

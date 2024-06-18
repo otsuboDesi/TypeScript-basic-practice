@@ -31,10 +31,20 @@ class Application {
     this.taskCollection.add(task);
 
     // Taskのインスタンスをappend()に渡して画面にタスクを表示させる
-    this.taskRender.append(task);
+    const { deleteButtonEl } = this.taskRender.append(task);
 
+    this,
+      this.eventListener.app(task.id, "click", deleteButtonEl, () =>
+        this.handleClickDeleteTask(task)
+      );
     //valueを空文字に代入して、画面の入力フォームの文字を空にしている
     titleInput.value = "";
+  };
+
+  private handleClickDeleteTaskprivate = (task: Task) => {
+    if (!window.confirm(`「${task.title}を削除してよろしいですか？」`)) return;
+
+    console.log(task);
   };
 }
 
