@@ -1,5 +1,5 @@
 import { EventListener } from "./EventListener";
-import { Task } from "./Task";
+import { Status, Task } from "./Task";
 import { TaskCollection } from "./TaskCollection";
 import { TaskRender } from "./TaskRender";
 
@@ -22,7 +22,7 @@ class Application {
       this.handleSubmit
     );
 
-    this.taskRenderer.subscribeDragAndDrop();
+    this.taskRenderer.subscribeDragAndDrop(this.handleDropAndDrop);
   }
 
   private handleSubmit = (e: Event) => {
@@ -52,6 +52,20 @@ class Application {
     this.taskCollection.delete(task);
     this.taskRenderer.remove(task);
     console.log(this.taskCollection);
+  };
+
+  private handleDropAndDrop = (
+    el: Element,
+    sibling: Element | null,
+    newStatus: Status
+  ) => {
+    const taskId = this.taskRenderer.getId(el);
+
+    if (!taskId) return;
+
+    console.log("taskId:", taskId);
+    console.log("sibling:", sibling);
+    console.log("newStatus:", newStatus);
   };
 }
 
