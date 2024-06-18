@@ -33,18 +33,18 @@ class Application {
     // Taskのインスタンスをappend()に渡して画面にタスクを表示させる
     const { deleteButtonEl } = this.taskRender.append(task);
 
-    this,
-      this.eventListener.app(task.id, "click", deleteButtonEl, () =>
-        this.handleClickDeleteTask(task)
-      );
+    this.eventListener.add(task.id, "click", deleteButtonEl, () =>
+      this.handleClickDeleteTask(task)
+    );
     //valueを空文字に代入して、画面の入力フォームの文字を空にしている
     titleInput.value = "";
   };
 
-  private handleClickDeleteTaskprivate = (task: Task) => {
-    if (!window.confirm(`「${task.title}を削除してよろしいですか？」`)) return;
+  private handleClickDeleteTask = (task: Task) => {
+    if (!window.confirm(`「${task.title}」を削除してよろしいですか？`)) return;
 
-    console.log(task);
+    // 削除ボタンクリックのイベントハンドラをEventListenerから削除する
+    this.eventListener.remove(task.id);
   };
 }
 
