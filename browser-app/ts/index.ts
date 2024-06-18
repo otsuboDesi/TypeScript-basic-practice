@@ -14,12 +14,22 @@ class Application {
 
   start() {
     const createForm = document.getElementById("createForm") as HTMLElement;
+    const delteAllDoneTaskButton = document.getElementById(
+      "deleteAllDoneTask"
+    ) as HTMLElement;
 
     this.eventListener.add(
       "submit-handler",
       "submit",
       createForm,
       this.handleSubmit
+    );
+
+    this.eventListener.add(
+      "click-handler",
+      "click",
+      delteAllDoneTaskButton,
+      this.handleClickDeleteAllDoneTask
     );
 
     this.taskRenderer.subscribeDragAndDrop(this.handleDropAndDrop);
@@ -52,6 +62,11 @@ class Application {
     this.taskCollection.delete(task);
     this.taskRenderer.remove(task);
     console.log(this.taskCollection);
+  };
+
+  private handleClickDeleteAllDoneTask = () => {
+    if (!window.confirm("DONEのタスクを一括削除してよろしいですか？")) return;
+    console.log("delete");
   };
 
   private handleDropAndDrop = (
