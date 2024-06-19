@@ -54,13 +54,18 @@ class Application {
     titleInput.value = "";
   };
 
+  // 指定した複数のタスクの削除
+  private executeDeleteTask = (task: Task) => {
+    this.eventListener.remove(task.id);
+    this.taskCollection.delete(task);
+    this.taskRenderer.remove(task);
+  };
+
   private handleClickDeleteTask = (task: Task) => {
     if (!window.confirm(`「${task.title}」を削除してよろしいですか？`)) return;
 
     // 削除ボタンクリックのイベントハンドラをEventListenerから削除する
-    this.eventListener.remove(task.id);
-    this.taskCollection.delete(task);
-    this.taskRenderer.remove(task);
+    this.executeDeleteTask(task);
     console.log(this.taskCollection);
   };
 
@@ -68,8 +73,11 @@ class Application {
     if (!window.confirm("DONEのタスクを一括削除してよろしいですか？")) return;
 
     // Doneの状態になっているタスクの一覧を取得
-    const doneTask = this.taskCollection.filter(statusMap.done);
-    console.log(doneTask);
+    const doneTasks = this.taskCollection.filter(statusMap.done);
+    console.log(doneTasks);
+
+    //抽出したdoneTasksに対してforEachでループさせて呼び出し、複数タスク一括削除の処理をする
+    doneTasks.forEach((task) => this.executeDeleteTask(task));
   };
 
   private handleDropAndDrop = (
