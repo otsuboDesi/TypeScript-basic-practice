@@ -105,7 +105,20 @@ class Application {
     task.update({ status: newStatus });
     this.taskCollection.update(task);
 
-    console.log(sibling);
+    if (sibling) {
+      const nextTaskId = this.taskRenderer.getId(sibling);
+      console.log(sibling);
+
+      if (!nextTaskId) return;
+
+      const nextTask = this.taskCollection.find(nextTaskId);
+
+      if (!nextTask) return;
+      this.taskCollection.moveAboveTarget(task, nextTask);
+    } else {
+      // siblingが存在しない場合は、対象となるタスクをリストの最後に移動させる
+      this.taskCollection.moveToLast(task);
+    }
   };
 }
 
