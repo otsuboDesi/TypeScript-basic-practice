@@ -39,6 +39,32 @@ export class TaskCollection {
     return this.tasks.filter(({ status }) => status === filterStatus);
   }
 
+  // 対象となるタスクをターゲットとなるタスクの前に移動させるメソッド
+  moveAboveTarget(task: Task, target: Task) {
+    const taskIndex = this.tasks.indexOf(task);
+    const targetIndex = this.tasks.indexOf(target);
+
+    this.changeOrder(
+      task,
+      taskIndex,
+      taskIndex < targetIndex ? targetIndex - 1 : targetIndex
+    );
+  }
+
+  // タスクを最後に移動させるメソッド
+  moveToLast(task: Task) {
+    const taskIndex = this.tasks.indexOf(task);
+
+    this.changeOrder(task, taskIndex, this.tasks.length);
+  }
+
+  // タスクの並びを変更するメソッド
+  private changeOrder(task: Task, taskIndex: number, targetIndex: number) {
+    this.tasks.splice(taskIndex, 1);
+    this.tasks.splice(targetIndex, 0, task);
+    this.updateStorage();
+  }
+
   private updateStorage() {
     this.storage.setItem(STORAGE_KEY, JSON.stringify(this.tasks));
   }
