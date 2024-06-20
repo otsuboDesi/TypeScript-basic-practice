@@ -13,11 +13,17 @@ class Application {
   );
 
   start() {
+    const taskItems = this.taskRenderer.renderAll(this.taskCollection);
     const createForm = document.getElementById("createForm") as HTMLElement;
     const delteAllDoneTaskButton = document.getElementById(
       "deleteAllDoneTask"
     ) as HTMLElement;
 
+    taskItems.forEach(({ task, deleteButtonEl }) => {
+      this.eventListener.add(task.id, "click", deleteButtonEl, () =>
+        this.handleClickDeleteTask(task)
+      );
+    });
     this.eventListener.add(
       "submit-handler",
       "submit",
