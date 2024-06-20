@@ -1,3 +1,5 @@
+import { v4 as uuid } from "uuid";
+
 type Listeners = {
   [id: string]: {
     event: string;
@@ -11,10 +13,10 @@ export class EventListener {
 
   //   引数として与えられたHTML要素に対して、任意のイベントを登録するためのメソッド
   add(
-    listenerId: string,
     event: string,
     element: HTMLElement,
-    handler: (e: Event) => void
+    handler: (e: Event) => void,
+    listenerId = uuid()
   ) {
     this.listeners[listenerId] = {
       event,

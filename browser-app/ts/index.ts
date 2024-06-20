@@ -15,27 +15,24 @@ class Application {
   start() {
     const taskItems = this.taskRenderer.renderAll(this.taskCollection);
     const createForm = document.getElementById("createForm") as HTMLElement;
-    const delteAllDoneTaskButton = document.getElementById(
+    const deleteAllDoneTaskButton = document.getElementById(
       "deleteAllDoneTask"
     ) as HTMLElement;
 
     taskItems.forEach(({ task, deleteButtonEl }) => {
-      this.eventListener.add(task.id, "click", deleteButtonEl, () =>
-        this.handleClickDeleteTask(task)
+      this.eventListener.add(
+        "click",
+        deleteButtonEl,
+        () => this.handleClickDeleteTask(task),
+        task.id
       );
     });
-    this.eventListener.add(
-      "submit-handler",
-      "submit",
-      createForm,
-      this.handleSubmit
-    );
 
+    this.eventListener.add("submit", createForm, this.handleSubmit);
     this.eventListener.add(
-      "click-handler",
       "click",
-      delteAllDoneTaskButton,
-      this.handleClickDeleteAllDoneTask
+      deleteAllDoneTaskButton,
+      this.handleClickDeleteAllDoneTasks
     );
 
     this.taskRenderer.subscribeDragAndDrop(this.handleDropAndDrop);
@@ -53,8 +50,11 @@ class Application {
     // Taskのインスタンスをappend()に渡して画面にタスクを表示させる
     const { deleteButtonEl } = this.taskRenderer.append(task);
 
-    this.eventListener.add(task.id, "click", deleteButtonEl, () =>
-      this.handleClickDeleteTask(task)
+    this.eventListener.add(
+      "click",
+      deleteButtonEl,
+      () => this.handleClickDeleteTask(task),
+      task.id
     );
     //valueを空文字に代入して、画面の入力フォームの文字を空にしている
     titleInput.value = "";
@@ -75,7 +75,7 @@ class Application {
     console.log(this.taskCollection);
   };
 
-  private handleClickDeleteAllDoneTask = () => {
+  private handleClickDeleteAllDoneTasks = () => {
     if (!window.confirm("DONEのタスクを一括削除してよろしいですか？")) return;
 
     // Doneの状態になっているタスクの一覧を取得
