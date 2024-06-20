@@ -1,5 +1,6 @@
 import dragula from "dragula";
 import { Status, Task, statusMap } from "./Task";
+import { TaskCollection } from "./TaskCollection";
 
 export class TaskRender {
   constructor(
@@ -64,6 +65,47 @@ export class TaskRender {
 
   getId(el: Element) {
     return el.id;
+  }
+
+  // TODO, DOING, DONE のそれぞれのリストに対してrenderListを呼び出し、画面への描写を行った後、
+  // 返ってきた配列をまとめて１つの配列にしている
+  renderAll(taskCollection: TaskCollection) {
+    const todoTasks = this.renderList(
+      taskCollection.filter(statusMap.todo),
+      this.todoList
+    );
+    const doingTasks = this.renderList(
+      taskCollection.filter(statusMap.doing),
+      this.doingList
+    );
+    const doneTasks = this.renderList(
+      taskCollection.filter(statusMap.done),
+      this.doneList
+    );
+
+    return [...todoTasks, ...doingTasks, ...doneTasks];
+  }
+
+  // 渡されたtasksのそれぞれのタスクインスタンスを使って、
+  // すでに実装されているrenderTaskを呼び出してタスクのHTML要素を生成
+  private renderList(tasks: Task[], listEl: HTMLElement) {
+    if (tasks.length === 0) return [];
+
+    const taskList: Array<{
+      task: Task;
+      deleteButtonEl: HTMLButtonElement;
+    }> = [];
+
+    tasks.forEach((task) => {
+      const { taskEl, deleteButtonEl } = this.render(task);
+
+      // ここで画面に描写
+      listEl.append(taskEl);
+      // 追加したdeleteButtonElに対してイベントハンドラを登録する必要がある
+      taskList.push({ task, deleteButtonEl });
+    });
+
+    return taskList;
   }
 
   private render(task: Task) {
