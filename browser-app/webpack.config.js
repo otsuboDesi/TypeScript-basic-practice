@@ -2,7 +2,8 @@ const { resolve } = require("path");
 
 module.exports = {
   // どの環境向けにビルドするのか指定する
-  mode: "development",
+  // mode: "development",
+  mode: process.env.NODE_ENV || "development",
   //   ソースマップを生成する方法を指定する
   devtool: "inline-source-map",
   //   バンドルするファイルのエントリーポイントとなるファイルのパスを文字列で指定する
