@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "webpack -w",
-    "build": "NODE_ENV=production webpack",
+    "build": "set NODE_ENV=production webpack",
     "serve": "serve ./ -p 3000"
   },
   "keywords": [],
@@ -13,7 +13,7 @@
   "license": "ISC",
   "devDependencies": {
     "@types/dragula": "^3.7.1",
-    "@types/uuid": "^8.3.2",
+    "@types/uuid": "^8.3.1",
     "serve": "^12.0.0",
     "ts-loader": "^9.2.5",
     "typescript": "^4.3.5",
