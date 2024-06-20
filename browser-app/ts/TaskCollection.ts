@@ -1,4 +1,4 @@
-import { Status, Task } from "./Task";
+import { Status, Task, TaskObject } from "./Task";
 
 const STORAGE_KEY = "TASKS";
 
@@ -51,7 +51,9 @@ export class TaskCollection {
     // JSON.parseで渡した文字列によっては、変換してエラーが発生してしまう可能性もあるのでtryでエラーをキャッチする
     try {
       // JSON.parse: 配列に変換 しかし、anyを返すメソッド
-      const storedTasks: any[] = JSON.parse(jsonString);
+      const storedTasks = JSON.parse(jsonString);
+
+      assertIsTaskObjects(storedTasks);
       const tasks = storedTasks.map((task) => new Task(task));
 
       console.log(tasks);
@@ -61,5 +63,11 @@ export class TaskCollection {
       this.storage.removeItem(STORAGE_KEY);
       return [];
     }
+  }
+}
+
+function assertIsTaskObjects(value: any): asserts value is TaskObject[] {
+  if (!Array.isArray(value) || !value.every((item) => Task.validate(item))) {
+    throw new Error("引数「value」は TaskObject[] 型と一致しません。");
   }
 }
