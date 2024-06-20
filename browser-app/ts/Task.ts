@@ -15,12 +15,12 @@ export type Status = (typeof statusMap)[keyof typeof statusMap];
 export class Task {
   readonly id;
   title;
-  status: Status;
+  status;
 
-  constructor(properties: { title: string }) {
-    this.id = uuid();
+  constructor(properties: { id?: string; title: string; status?: Status }) {
+    this.id = properties.id || uuid();
     this.title = properties.title;
-    this.status = statusMap.todo;
+    this.status = properties.status || statusMap.todo;
   }
 
   update(properties: { title?: string; status?: Status }) {
