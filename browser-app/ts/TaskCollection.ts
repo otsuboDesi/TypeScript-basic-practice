@@ -43,11 +43,23 @@ export class TaskCollection {
     this.storage.setItem(STORAGE_KEY, JSON.stringify(this.tasks));
   }
 
-  private getStoredTasks(): Task[] {
+  private getStoredTasks() {
     const jsonString = this.storage.getItem(STORAGE_KEY);
 
     if (!jsonString) return [];
-    console.log(jsonString);
-    return [];
+
+    // JSON.parseで渡した文字列によっては、変換してエラーが発生してしまう可能性もあるのでtryでエラーをキャッチする
+    try {
+      // JSON.parse: 配列に変換 しかし、anyを返すメソッド
+      const storedTasks: any[] = JSON.parse(jsonString);
+      const tasks = storedTasks.map((task) => new Task(task));
+
+      console.log(tasks);
+      return tasks;
+    } catch {
+      // errorになったらその値をlocalStorageを使って削除する
+      this.storage.removeItem(STORAGE_KEY);
+      return [];
+    }
   }
 }
